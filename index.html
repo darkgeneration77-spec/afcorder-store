@@ -3,19 +3,45 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AFC 日本精研健康产品与一对一咨询。">
   <title>AFC · 私享健康美学</title>
   <style>html,body,iframe{width:100%;height:100%;margin:0;border:0;display:block;background:#f5f4f0}iframe{min-height:100vh}</style>
 </head>
 <body>
   <iframe id="afc" title="AFC 产品订购" src="/afc-page-layout.html"></iframe>
   <script>
-    const frame=document.getElementById('afc');
-    frame.addEventListener('load',()=>{
-      const script=frame.contentDocument.createElement('script');
-      script.type='module';
-      script.src='/assets/afc-original-ingredients-v2.js';
-      frame.contentDocument.body.append(script);
-    },{once:true});
+    const frame = document.getElementById('afc');
+
+    frame.addEventListener('load', () => {
+      const doc = frame.contentDocument;
+      if (!doc) return;
+
+      const premiumStyle = doc.createElement('link');
+      premiumStyle.rel = 'stylesheet';
+      premiumStyle.href = '/assets/afc-premium-v2.css';
+      doc.head.append(premiumStyle);
+
+      const valueStrip = doc.createElement('section');
+      valueStrip.className = 'afc-value-strip';
+      valueStrip.setAttribute('aria-label', 'AFC 服务优势');
+      valueStrip.innerHTML = `
+        <div class="afc-value-grid">
+          <div class="afc-value-item"><strong>日本精研</strong><span>严选 AFC 品质配方</span></div>
+          <div class="afc-value-item"><strong>正品保障</strong><span>清晰产品与来源说明</span></div>
+          <div class="afc-value-item"><strong>一对一咨询</strong><span>先了解需求，再选择产品</span></div>
+          <div class="afc-value-item"><strong>全马服务</strong><span>WhatsApp 咨询与配送安排</span></div>
+        </div>`;
+
+      const firstSection = doc.querySelector('.first');
+      if (firstSection && !doc.querySelector('.afc-value-strip')) {
+        firstSection.insertAdjacentElement('afterend', valueStrip);
+      }
+
+      const productScript = doc.createElement('script');
+      productScript.type = 'module';
+      productScript.src = '/assets/afc-original-ingredients-v2.js';
+      doc.body.append(productScript);
+    }, { once: true });
   </script>
 </body>
 </html>
